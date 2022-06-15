@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using SalesWebMVC.Models;
 using SalesWebMVC.Data;
 using SalesWebMVC.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace SalesWebMVC
 {
@@ -50,7 +52,19 @@ namespace SalesWebMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,SeedingService seedingService)
         {
-           //Verifica se está em desenvolvimento se estiver executa os comandos para popular as tabelas.
+
+            var enUS = new CultureInfo("en-us");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS }
+
+            };
+
+            app.UseRequestLocalization(localizationOptions);
+            //Verifica se está em desenvolvimento se estiver executa os comandos para popular as tabelas.
+                      
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
