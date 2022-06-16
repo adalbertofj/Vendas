@@ -41,6 +41,15 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+
+            // validação para caso o javascript do browser do usuário esteja desabilitado
+            if (!ModelState.IsValid) 
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+            //fim
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -108,6 +117,14 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+            // validação para caso o javascript do browser do usuário esteja desabilitado
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+            // fim 
             if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Ids não correspondem" });
